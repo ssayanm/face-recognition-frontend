@@ -67,6 +67,7 @@ class App extends Component {
   calculateFaceLocation = data => {
     const clarifaiFace =
       data.outputs[0].data.regions[0].region_info.bounding_box;
+
     const image = document.getElementById("inputimage");
     const width = Number(image.width);
     const height = Number(image.height);
@@ -82,13 +83,13 @@ class App extends Component {
     this.setState({ box: box });
   };
 
-  onInputChange = event => {
+  onImageLinkChange = event => {
     this.setState({ input: event.target.value });
   };
 
-  onButtonSubmit = () => {
+  onPictureSubmit = () => {
     this.setState({ imageUrl: this.state.input });
-    fetch("https://damp-bastion-95553.herokuapp.com/imageurl", {
+    fetch("http://localhost:3001/imageurl", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -98,7 +99,7 @@ class App extends Component {
       .then(response => response.json())
       .then(response => {
         if (response) {
-          fetch("https://damp-bastion-95553.herokuapp.com/image", {
+          fetch("http://localhost:3001/image", {
             method: "put",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -143,8 +144,8 @@ class App extends Component {
               entries={this.state.user.entries}
             />
             <ImageLinkForm
-              onInputChange={this.onInputChange}
-              onButtonSubmit={this.onButtonSubmit}
+              onImageLinkChange={this.onImageLinkChange}
+              onPictureSubmit={this.onPictureSubmit}
             />
             <FaceRecognition box={box} imageUrl={imageUrl} />
           </div>
